@@ -5,6 +5,7 @@ set -e
 REPO="codechaser-kr/git-workflow-kit"
 BRANCH="main"
 BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SKILLS=("branch" "commit" "pr")
 COMMANDS=("branch" "commit" "pr")
@@ -44,6 +45,19 @@ download() {
   fi
 }
 
+install_file() {
+  local source_dir="$1"
+  local name="$2"
+  local dest="$3"
+  local local_file="${SCRIPT_DIR}/${source_dir}/${name}.md"
+
+  if [ -f "$local_file" ]; then
+    cp "$local_file" "$dest"
+  else
+    download "${BASE_URL}/${source_dir}/${name}.md" "$dest"
+  fi
+}
+
 install_markdown_files() {
   local source_dir="$1"
   local target_dir="$2"
@@ -53,7 +67,7 @@ install_markdown_files() {
 
   for name in "$@"; do
     echo "→ installing ${name} → ${target_dir}"
-    download "${BASE_URL}/${source_dir}/${name}.md" "${target_dir}/${name}.md"
+    install_file "$source_dir" "$name" "${target_dir}/${name}.md"
   done
 }
 
