@@ -54,6 +54,11 @@ validate_target_paths() {
     echo "❌ ${ISSUE_TEMPLATE_DIR} 가 디렉터리가 아닙니다."
     exit 1
   fi
+
+  if [ -d "$PR_TEMPLATE_PATH" ]; then
+    echo "❌ ${PR_TEMPLATE_PATH} 는 파일이어야 하는데 디렉터리입니다."
+    exit 1
+  fi
 }
 
 # ===== 실행 =====
