@@ -7,27 +7,22 @@ BRANCH="main"
 BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 
 SKILLS=("branch" "commit" "pr")
+COMMANDS=("branch" "commit" "pr")
 
 CODEX_DIR="${HOME}/.codex/skills"
-CLAUDE_SKILLS_DIR="${HOME}/.claude/skills"
 CLAUDE_COMMANDS_DIR="${HOME}/.claude/commands"
 
 INSTALL_CODEX=1
 INSTALL_CLAUDE=1
-INSTALL_COMMANDS=1
 
 # ===== 옵션 처리 =====
 for arg in "$@"; do
   case $arg in
     --codex-only)
       INSTALL_CLAUDE=0
-      INSTALL_COMMANDS=0
       ;;
     --claude-only)
       INSTALL_CODEX=0
-      ;;
-    --no-commands)
-      INSTALL_COMMANDS=0
       ;;
     *)
       ;;
@@ -49,13 +44,16 @@ download() {
   fi
 }
 
-install_skills() {
-  local target_dir="$1"
+install_markdown_files() {
+  local source_dir="$1"
+  local target_dir="$2"
+  shift 2
+
   mkdir -p "$target_dir"
 
-  for skill in "${SKILLS[@]}"; do
-    echo "→ installing ${skill} → ${target_dir}"
-    download "${BASE_URL}/skills/${skill}.md" "${target_dir}/${skill}.md"
+  for name in "$@"; do
+    echo "→ installing ${name} → ${target_dir}"
+    download "${BASE_URL}/${source_dir}/${name}.md" "${target_dir}/${name}.md"
   done
 }
 
@@ -66,19 +64,13 @@ echo "🚀 git-workflow-kit 설치 시작"
 if [ "$INSTALL_CODEX" -eq 1 ]; then
   echo ""
   echo "📦 Codex 설치: ${CODEX_DIR}"
-  install_skills "$CODEX_DIR"
+  install_markdown_files "skills" "$CODEX_DIR" "${SKILLS[@]}"
 fi
 
 if [ "$INSTALL_CLAUDE" -eq 1 ]; then
   echo ""
-  echo "📦 Claude skills 설치: ${CLAUDE_SKILLS_DIR}"
-  install_skills "$CLAUDE_SKILLS_DIR"
-fi
-
-if [ "$INSTALL_COMMANDS" -eq 1 ]; then
-  echo ""
   echo "📦 Claude commands 설치: ${CLAUDE_COMMANDS_DIR}"
-  install_skills "$CLAUDE_COMMANDS_DIR"
+  install_markdown_files "commands" "$CLAUDE_COMMANDS_DIR" "${COMMANDS[@]}"
 fi
 
 echo ""
