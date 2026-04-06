@@ -2,7 +2,7 @@
 set -e
 
 # ===== 설정 =====
-REPO="codechaser-kr/ai-dev-skills"
+REPO="codechaser-kr/git-workflow-kit"
 BRANCH="main"
 BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 
@@ -61,7 +61,7 @@ install_skills() {
 
 # ===== 실행 =====
 
-echo "🚀 ai-dev-skills 설치 시작"
+echo "🚀 git-workflow-kit 설치 시작"
 
 if [ "$INSTALL_CODEX" -eq 1 ]; then
   echo ""
