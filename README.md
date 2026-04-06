@@ -57,21 +57,24 @@ curl -fsSL https://raw.githubusercontent.com/codechaser-kr/git-workflow-kit/main
 - Codex skills: `~/.codex/skills/<skill>/SKILL.md`
 - Claude skills: `~/.claude/skills/<skill>/SKILL.md`
 
-### GitHub 이슈 템플릿 설치 (`setup-github.sh`)
+### GitHub 템플릿 설치 (`setup-github.sh`)
 
-**레포별로** `.github/ISSUE_TEMPLATE/`에 이슈 템플릿을 추가합니다. 템플릿을 적용할 레포의 루트에서 실행합니다.
+**레포별로** `.github/ISSUE_TEMPLATE/`의 이슈 템플릿과 `.github/pull_request_template.md`를 추가합니다. 템플릿을 적용할 레포의 루트에서 실행합니다.
+
+이 스크립트는 레포에 포함된 `.github/ISSUE_TEMPLATE/*.md`와 `.github/pull_request_template.md`를 source of truth로 삼아 그대로 복사합니다. `.github/workflows` 같은 다른 GitHub 설정 파일은 건드리지 않습니다.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/codechaser-kr/git-workflow-kit/main/setup-github.sh | bash
 ```
 
-설치 후 변경사항을 커밋하고 푸시하면 GitHub Issues에서 사용할 수 있습니다.
+설치 후 변경사항을 커밋하고 푸시하면 GitHub Issues와 Pull Requests에서 사용할 수 있습니다.
 
 **설치되는 템플릿:**
 
 - 기능 개발 제안 (`feature_template.md`)
 - 기능 개선 제안 (`improvement_template.md`)
 - 결함 해결 (`fix_templatebug.md`)
+- Pull Request 템플릿 (`pull_request_template.md`)
 
 ## 사용 방법
 
