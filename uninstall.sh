@@ -34,12 +34,12 @@ remove_codex_skills() {
   fi
 
   for name in "$@"; do
-    local file="${target_dir}/${name}.md"
-    if [ -f "$file" ]; then
-      echo "🗑 removing $file"
-      rm -f "$file"
+    local skill_dir="${target_dir}/${name}"
+    if [ -d "$skill_dir" ]; then
+      echo "🗑 removing $skill_dir"
+      rm -rf "$skill_dir"
     else
-      echo "⚠️  $file 없음 (skip)"
+      echo "⚠️  $skill_dir 없음 (skip)"
     fi
   done
 }

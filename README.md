@@ -54,8 +54,8 @@ curl -fsSL https://raw.githubusercontent.com/codechaser-kr/git-workflow-kit/main
 
 **설치 위치:**
 
-- Codex skills: `~/.codex/skills`
-- Claude skills: `~/.claude/skills`
+- Codex skills: `~/.codex/skills/<skill>/SKILL.md`
+- Claude skills: `~/.claude/skills/<skill>/SKILL.md`
 
 ### GitHub 이슈 템플릿 설치 (`setup-github.sh`)
 

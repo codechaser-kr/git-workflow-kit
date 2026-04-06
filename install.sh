@@ -61,11 +61,11 @@ install_codex_skills() {
   local target_dir="$1"
   shift
 
-  mkdir -p "$target_dir"
-
   for name in "$@"; do
-    echo "→ installing ${name} → ${target_dir}"
-    install_file "skills/${name}.md" "${target_dir}/${name}.md"
+    local skill_dir="${target_dir}/${name}"
+    mkdir -p "$skill_dir"
+    echo "→ installing ${name} → ${skill_dir}/SKILL.md"
+    install_file "codex-skills/${name}/SKILL.md" "${skill_dir}/SKILL.md"
   done
 }
 
