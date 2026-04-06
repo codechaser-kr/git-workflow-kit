@@ -78,6 +78,6 @@ Description 작성 규칙:
 
 ```bash
 git branch -m <new-branch-name>
-git push origin :<old-branch-name>
+git push origin --delete <old-branch-name>
 git push -u origin <new-branch-name>
 ```

@@ -118,7 +118,7 @@ feature/sidebar-bookmark
 git branch -m feature/erp-bookmark-add
 
 # 만약 이미 원격에 푸시했다면
-git push origin :feature/update-component
+git push origin --delete feature/update-component
 git push -u origin feature/erp-bookmark-add
 
 참고: 브랜치 이름은 팀의 컨벤션을 따르는 것이 중요합니다. 제안된 이름을 참고하되, 팀 규칙에 맞게 조정하세요.
