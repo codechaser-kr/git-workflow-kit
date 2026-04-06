@@ -8,10 +8,10 @@ BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SKILLS=("branch" "commit" "pr")
-COMMANDS=("branch" "commit" "pr")
+CLAUDE_SKILLS=("branch" "commit" "pr")
 
 CODEX_DIR="${HOME}/.codex/skills"
-CLAUDE_COMMANDS_DIR="${HOME}/.claude/commands"
+CLAUDE_SKILLS_DIR="${HOME}/.claude/skills"
 
 INSTALL_CODEX=1
 INSTALL_CLAUDE=1
@@ -46,28 +46,38 @@ download() {
 }
 
 install_file() {
-  local source_dir="$1"
-  local name="$2"
-  local dest="$3"
-  local local_file="${SCRIPT_DIR}/${source_dir}/${name}.md"
+  local source_path="$1"
+  local dest="$2"
+  local local_file="${SCRIPT_DIR}/${source_path}"
 
   if [ -f "$local_file" ]; then
     cp "$local_file" "$dest"
   else
-    download "${BASE_URL}/${source_dir}/${name}.md" "$dest"
+    download "${BASE_URL}/${source_path}" "$dest"
   fi
 }
 
-install_markdown_files() {
-  local source_dir="$1"
-  local target_dir="$2"
-  shift 2
+install_codex_skills() {
+  local target_dir="$1"
+  shift
 
   mkdir -p "$target_dir"
 
   for name in "$@"; do
     echo "→ installing ${name} → ${target_dir}"
-    install_file "$source_dir" "$name" "${target_dir}/${name}.md"
+    install_file "skills/${name}.md" "${target_dir}/${name}.md"
+  done
+}
+
+install_claude_skills() {
+  local target_dir="$1"
+  shift
+
+  for name in "$@"; do
+    local skill_dir="${target_dir}/${name}"
+    mkdir -p "$skill_dir"
+    echo "→ installing ${name} → ${skill_dir}/SKILL.md"
+    install_file "claude-skills/${name}/SKILL.md" "${skill_dir}/SKILL.md"
   done
 }
 
@@ -78,13 +88,13 @@ echo "🚀 git-workflow-kit 설치 시작"
 if [ "$INSTALL_CODEX" -eq 1 ]; then
   echo ""
   echo "📦 Codex 설치: ${CODEX_DIR}"
-  install_markdown_files "skills" "$CODEX_DIR" "${SKILLS[@]}"
+  install_codex_skills "$CODEX_DIR" "${SKILLS[@]}"
 fi
 
 if [ "$INSTALL_CLAUDE" -eq 1 ]; then
   echo ""
-  echo "📦 Claude commands 설치: ${CLAUDE_COMMANDS_DIR}"
-  install_markdown_files "commands" "$CLAUDE_COMMANDS_DIR" "${COMMANDS[@]}"
+  echo "📦 Claude skills 설치: ${CLAUDE_SKILLS_DIR}"
+  install_claude_skills "$CLAUDE_SKILLS_DIR" "${CLAUDE_SKILLS[@]}"
 fi
 
 echo ""

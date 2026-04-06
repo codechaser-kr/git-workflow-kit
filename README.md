@@ -2,7 +2,7 @@
 
 Codex와 Claude에서 공통으로 사용할 수 있는 Git 워크플로우용 로컬 툴킷입니다.
 
-반복적으로 작성하는 브랜치명, 커밋 메시지, PR 설명 작성을 빠르게 돕기 위한 Codex skills, Claude commands와 GitHub 협업용 이슈 템플릿을 제공합니다.
+반복적으로 작성하는 브랜치명, 커밋 메시지, PR 설명 작성을 빠르게 돕기 위한 Codex skills, Claude skills와 GitHub 협업용 이슈 템플릿을 제공합니다.
 
 ## 포함 내용
 
@@ -55,7 +55,7 @@ curl -fsSL https://raw.githubusercontent.com/codechaser-kr/git-workflow-kit/main
 **설치 위치:**
 
 - Codex skills: `~/.codex/skills`
-- Claude commands: `~/.claude/commands`
+- Claude skills: `~/.claude/skills`
 
 ### GitHub 이슈 템플릿 설치 (`setup-github.sh`)
 
@@ -75,7 +75,7 @@ curl -fsSL https://raw.githubusercontent.com/codechaser-kr/git-workflow-kit/main
 
 ## 사용 방법
 
-Claude에서는 commands 로 설치되며 다음처럼 사용할 수 있습니다:
+Claude에서는 skills 로 설치되며 다음처럼 사용할 수 있습니다:
 
 ```
 /branch

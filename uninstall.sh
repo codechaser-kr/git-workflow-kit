@@ -2,10 +2,10 @@
 set -e
 
 SKILLS=("branch" "commit" "pr")
-COMMANDS=("branch" "commit" "pr")
+CLAUDE_SKILLS=("branch" "commit" "pr")
 
 CODEX_DIR="${HOME}/.codex/skills"
-CLAUDE_COMMANDS_DIR="${HOME}/.claude/commands"
+CLAUDE_SKILLS_DIR="${HOME}/.claude/skills"
 
 REMOVE_CODEX=1
 REMOVE_CLAUDE=1
@@ -24,7 +24,7 @@ for arg in "$@"; do
   esac
 done
 
-remove_markdown_files() {
+remove_codex_skills() {
   local target_dir="$1"
   shift
 
@@ -44,18 +44,38 @@ remove_markdown_files() {
   done
 }
 
+remove_claude_skills() {
+  local target_dir="$1"
+  shift
+
+  if [ ! -d "$target_dir" ]; then
+    echo "⚠️  ${target_dir} 존재하지 않음 (skip)"
+    return
+  fi
+
+  for name in "$@"; do
+    local skill_dir="${target_dir}/${name}"
+    if [ -d "$skill_dir" ]; then
+      echo "🗑 removing $skill_dir"
+      rm -rf "$skill_dir"
+    else
+      echo "⚠️  $skill_dir 없음 (skip)"
+    fi
+  done
+}
+
 echo "🧹 ai-dev-skills 제거 시작"
 
 if [ "$REMOVE_CODEX" -eq 1 ]; then
   echo ""
   echo "📦 Codex 제거: ${CODEX_DIR}"
-  remove_markdown_files "$CODEX_DIR" "${SKILLS[@]}"
+  remove_codex_skills "$CODEX_DIR" "${SKILLS[@]}"
 fi
 
 if [ "$REMOVE_CLAUDE" -eq 1 ]; then
   echo ""
-  echo "📦 Claude commands 제거: ${CLAUDE_COMMANDS_DIR}"
-  remove_markdown_files "$CLAUDE_COMMANDS_DIR" "${COMMANDS[@]}"
+  echo "📦 Claude skills 제거: ${CLAUDE_SKILLS_DIR}"
+  remove_claude_skills "$CLAUDE_SKILLS_DIR" "${CLAUDE_SKILLS[@]}"
 fi
 
 echo ""
