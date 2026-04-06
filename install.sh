@@ -87,7 +87,7 @@ echo "🚀 git-workflow-kit 설치 시작"
 
 if [ "$INSTALL_CODEX" -eq 1 ]; then
   echo ""
-  echo "📦 Codex 설치: ${CODEX_DIR}"
+  echo "📦 Codex skills 설치: ${CODEX_DIR}"
   install_codex_skills "$CODEX_DIR" "${SKILLS[@]}"
 fi
 
