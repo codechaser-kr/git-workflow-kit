@@ -5,29 +5,25 @@ set -e
 REPO="codechaser-kr/git-workflow-kit"
 BRANCH="main"
 BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SKILLS=("branch" "commit" "pr")
+CLAUDE_SKILLS=("branch" "commit" "pr")
 
 CODEX_DIR="${HOME}/.codex/skills"
 CLAUDE_SKILLS_DIR="${HOME}/.claude/skills"
-CLAUDE_COMMANDS_DIR="${HOME}/.claude/commands"
 
 INSTALL_CODEX=1
 INSTALL_CLAUDE=1
-INSTALL_COMMANDS=1
 
 # ===== 옵션 처리 =====
 for arg in "$@"; do
   case $arg in
     --codex-only)
       INSTALL_CLAUDE=0
-      INSTALL_COMMANDS=0
       ;;
     --claude-only)
       INSTALL_CODEX=0
-      ;;
-    --no-commands)
-      INSTALL_COMMANDS=0
       ;;
     *)
       ;;
@@ -49,13 +45,39 @@ download() {
   fi
 }
 
-install_skills() {
-  local target_dir="$1"
-  mkdir -p "$target_dir"
+install_file() {
+  local source_path="$1"
+  local dest="$2"
+  local local_file="${SCRIPT_DIR}/${source_path}"
 
-  for skill in "${SKILLS[@]}"; do
-    echo "→ installing ${skill} → ${target_dir}"
-    download "${BASE_URL}/skills/${skill}.md" "${target_dir}/${skill}.md"
+  if [ -f "$local_file" ]; then
+    cp "$local_file" "$dest"
+  else
+    download "${BASE_URL}/${source_path}" "$dest"
+  fi
+}
+
+install_codex_skills() {
+  local target_dir="$1"
+  shift
+
+  for name in "$@"; do
+    local skill_dir="${target_dir}/${name}"
+    mkdir -p "$skill_dir"
+    echo "→ installing ${name} → ${skill_dir}/SKILL.md"
+    install_file "codex-skills/${name}/SKILL.md" "${skill_dir}/SKILL.md"
+  done
+}
+
+install_claude_skills() {
+  local target_dir="$1"
+  shift
+
+  for name in "$@"; do
+    local skill_dir="${target_dir}/${name}"
+    mkdir -p "$skill_dir"
+    echo "→ installing ${name} → ${skill_dir}/SKILL.md"
+    install_file "claude-skills/${name}/SKILL.md" "${skill_dir}/SKILL.md"
   done
 }
 
@@ -66,19 +88,13 @@ echo "🚀 git-workflow-kit 설치 시작"
 if [ "$INSTALL_CODEX" -eq 1 ]; then
   echo ""
   echo "📦 Codex 설치: ${CODEX_DIR}"
-  install_skills "$CODEX_DIR"
+  install_codex_skills "$CODEX_DIR" "${SKILLS[@]}"
 fi
 
 if [ "$INSTALL_CLAUDE" -eq 1 ]; then
   echo ""
   echo "📦 Claude skills 설치: ${CLAUDE_SKILLS_DIR}"
-  install_skills "$CLAUDE_SKILLS_DIR"
-fi
-
-if [ "$INSTALL_COMMANDS" -eq 1 ]; then
-  echo ""
-  echo "📦 Claude commands 설치: ${CLAUDE_COMMANDS_DIR}"
-  install_skills "$CLAUDE_COMMANDS_DIR"
+  install_claude_skills "$CLAUDE_SKILLS_DIR" "${CLAUDE_SKILLS[@]}"
 fi
 
 echo ""
